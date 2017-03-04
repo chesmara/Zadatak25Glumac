@@ -25,11 +25,15 @@ import android.widget.Toast;
 
 import com.example.androiddevelopment.zadatak20glumac.R;
 import com.example.androiddevelopment.zadatak20glumac.adapters.DrawerAdapter;
+import com.example.androiddevelopment.zadatak20glumac.db.DatabaseHelper;
+import com.example.androiddevelopment.zadatak20glumac.db.model.Glumac;
 import com.example.androiddevelopment.zadatak20glumac.dialogs.AboutDialog;
 import com.example.androiddevelopment.zadatak20glumac.dialogs.KontaktGialog;
 import com.example.androiddevelopment.zadatak20glumac.model.NavigationItem;
 import com.example.androiddevelopment.zadatak20glumac.provajderi.glumacProvajder;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +58,7 @@ public class FirstActivity extends AppCompatActivity {
     private int itemId = 0;
 
 
-
+    private DatabaseHelper databaseHelper;
 
 
     @Override
@@ -66,7 +70,7 @@ public class FirstActivity extends AppCompatActivity {
         drawerItems.add(new NavigationItem(getString(R.string.drawer_settings), getString(R.string.drawer_settings_long), R.drawable.ic_action_settings));
         drawerItems.add(new NavigationItem(getString(R.string.drawer_about), getString(R.string.drawer_about_long), R.drawable.ic_action_about));
         drawerItems.add(new NavigationItem("Kontakt", "Podaci o udruženju", R.drawable.ic_action_contact));
-        drawerItems.add(new NavigationItem("O autoru", "Ko je tvorac svega spomenutog",R.drawable.ic_action_autor ));
+        drawerItems.add(new NavigationItem("O autoru", "Ko je tvorac svega spomenutog", R.drawable.ic_action_autor));
 
 
         drawerTitle = getTitle();
@@ -81,10 +85,6 @@ public class FirstActivity extends AppCompatActivity {
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
         drawerList.setAdapter(adapter);
-
-
-
-
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -117,21 +117,22 @@ public class FirstActivity extends AppCompatActivity {
                 drawerLayout.requestLayout();
             }
         };
+            refresh();
+    }
 
 
-
-
-
+    private void refresh() {
         final List<String> imenaGlumaca= glumacProvajder.getImenaGlumaca();
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,R.layout.list_item, imenaGlumaca) ;
-        ListView listView=(ListView) findViewById(R.id.listaGlumaca);
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.list_item, imenaGlumaca);
+        ListView listView = (ListView) findViewById(R.id.listaGlumaca);
 
         listView.setAdapter(dataAdapter);
 
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(FirstActivity.this, SecondActivity.class);
                     intent.putExtra("position", position);
                     startActivity(intent);
@@ -141,8 +142,8 @@ public class FirstActivity extends AppCompatActivity {
 
             });
 
+        }
 
-    }
 
     // Method(s) that manage Toolbar.
 
@@ -158,6 +159,7 @@ public class FirstActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_create:
+                addItem();
                 Toast.makeText(this, "Action " + getString(R.string.fragment_master_action_create) + " executed.", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_update:
@@ -315,13 +317,49 @@ public class FirstActivity extends AppCompatActivity {
         final EditText glumacRating = (EditText) dialog.findViewById(R.id.glumac_rating);
 
         Button ok = (Button) dialog.findViewById(R.id.ok);
-        ok.setOnClickListener();
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name= glumacName.getText().toString();
+                String desct= glumacDescr.getText().toString();
+                String rating=glumacRating.getText().toString();
+                String image= (String) imageSpinner.getSelectedItem();
+
+                Glumac glumac = new Glumac();
+                glumac.setName(name);
+                glumac.setDescribe(desct);
+                glumac.setRating(rating);
 
 
+
+                try {
+                    getDatabaseHelper().getmGlumacDao().create(glumac);
+
+                    Toast.makeText(FirstActivity.this,"Glumac inserted!", Toast.LENGTH_SHORT).show();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        Button cancel = (Button) dialog.findViewById(R.id.cancel);
+        cancel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+            dialog.show();
 
     }
 
-
+    public DatabaseHelper getDatabaseHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
 
 
 

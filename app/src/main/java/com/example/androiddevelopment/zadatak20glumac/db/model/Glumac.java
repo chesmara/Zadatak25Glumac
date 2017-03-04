@@ -18,31 +18,36 @@ public class Glumac {
 
     public static final String FIELD_NAME_ID  =  "id";
     public static final String FIELD_NAME_NAME = "name";
-    public static final String FILED_NAME_DESCRIBE = "describe";
+    public static final String FIELD_NAME_DESCRIBE = "describe";
+    public static final String FIELD_NAME_RATING = "rating";
+    public static final String FIELD_NAME_IMAGE = "image";
+
 
     @DatabaseField(columnName = FIELD_NAME_ID, generatedId = true)
-    private String id;
+    private int id;
 
     @DatabaseField(columnName = FIELD_NAME_NAME)
     private String name;
 
-    @DatabaseField(columnName = FILED_NAME_DESCRIBE)
+    @DatabaseField(columnName = FIELD_NAME_DESCRIBE)
     private String describe;
+
+    @DatabaseField(columnName = FIELD_NAME_RATING)
+    private String rating;
+
+    @DatabaseField(columnName = FIELD_NAME_IMAGE)
+    private String image;
 
     public Glumac(){
     }
 
-    public Glumac(int id, String name, String describe){
-        this.id=id;
-        this.name=name;
-        this.describe=describe;
-    }
 
-    public String getId() {
+
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -62,5 +67,24 @@ public class Glumac {
         this.describe = describe;
     }
 
+    public String getRating() {
+        return rating;
+    }
 
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

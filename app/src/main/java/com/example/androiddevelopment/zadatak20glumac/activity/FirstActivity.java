@@ -1,5 +1,6 @@
 package com.example.androiddevelopment.zadatak20glumac.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -15,8 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.androiddevelopment.zadatak20glumac.R;
@@ -288,6 +292,31 @@ public class FirstActivity extends AppCompatActivity {
         setTitle(drawerItems.get(position).getTitle());
        drawerLayout.closeDrawer(drawerPane);
         */
+
+
+    }
+
+    public void addItem( )  {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_layout);
+
+        final Spinner imageSpinner= (Spinner) dialog.findViewById(R.id.glumac_image);
+        List<String> imageList = new ArrayList<String>();
+        imageList.add("ckalja.jpg");
+        imageList.add("djuza.jpg");
+        imageList.add("nikola.jpg");
+        imageList.add("paja.jpg");
+        ArrayAdapter<String> imagesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, imageList);
+        imageSpinner.setAdapter(imagesAdapter);
+        imageSpinner.setSelection(0);
+
+        final EditText glumacName = (EditText) dialog.findViewById(R.id.glumac_name);
+        final EditText glumacDescr = (EditText) dialog.findViewById(R.id.glumac_description);
+        final EditText glumacRating = (EditText) dialog.findViewById(R.id.glumac_rating);
+
+        Button ok = (Button) dialog.findViewById(R.id.ok);
+        ok.setOnClickListener();
+
 
 
     }

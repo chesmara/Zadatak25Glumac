@@ -7,7 +7,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.example.androiddevelopment.zadatak20glumac.db.model.Glumac
+import com.example.androiddevelopment.zadatak20glumac.db.model.Glumac;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
@@ -33,4 +33,28 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource, int oldVersion, int newVersion) {
+
+        try {
+            TableUtils.dropTable(connectionSource, Glumac.class,true);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        onCreate(db,connectionSource);
+    }
+       public Dao<Glumac,Integer> getmGlumacDao() throws SQLException {
+           if(mGlumacDao== null){
+               mGlumacDao=getDao(Glumac.class);
+           }
+           return mGlumacDao;
+       }
+        @Override
+        public void close(){
+            mGlumacDao= null;
+
+            super.close();
+        }
+
 }

@@ -28,9 +28,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
-            TableUtils.clearTable(connectionSource,Glumac.class);
+            TableUtils.createTable(connectionSource,Glumac.class);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
+            //e.printStackTrace();
         }
     }
 
@@ -39,12 +40,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
         try {
             TableUtils.dropTable(connectionSource, Glumac.class,true);
+            onCreate(db,connectionSource);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
+            //e.printStackTrace();
         }
-        onCreate(db,connectionSource);
+
     }
-       public Dao<Glumac,Integer> getmGlumacDao() throws SQLException {
+       public Dao<Glumac,Integer> getGlumacDao() throws SQLException {
            if(mGlumacDao== null){
                mGlumacDao=getDao(Glumac.class);
            }

@@ -120,7 +120,7 @@ public class FirstActivity extends AppCompatActivity {
                 drawerLayout.requestLayout();
             }
         };
-        refresh();
+        refresh1();
     }
 
 
@@ -147,7 +147,7 @@ public class FirstActivity extends AppCompatActivity {
                 Toast.makeText(this, "Opcija unos novog glumca pokrenuta", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_update:
-                refresh ();
+                refresh1 ();
                 Toast.makeText(this, "Osvezavanje liste glumaca!!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_delete:
@@ -375,7 +375,7 @@ public class FirstActivity extends AppCompatActivity {
 
 
     }
-//-------------------  refresh -------------orginalni koji radi------------------------------------
+//-------------------  refresh1 -------------orginalni koji radi------------------------------------
     private void refresh1() {
         final List<String> imenaGlumaca= glumacProvajder.getImenaGlumaca();
 
